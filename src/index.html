@@ -1,17 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Weather Tracer</h1>
-    <form action="/weather/" method="get" enctype="multipart/form-data">
-        <label for="city">Enter a city:</label>
-        <input type="text" id="city" name="city">
-        <button type="submit">Search</button>
+<html>
+  <head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 40px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            
+        }
+
+        input[type="text"] {
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            padding: 10px;
+            width: 53%;
+        }
+
+        button[type="submit"] {
+            background-color: #008CBA;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #006A8E;
+        }
+
+        .weather-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .weather {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 60%;
+        }
+
+        .weather h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .weather p {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather App</h1>
+      
+      <form>
+        <label for="city"></label>
+        <input type="text" placeholder="Enter city name" id="input" name="city" required>
+        <button type="submit" onclick="getWeather()">Search</button>
       </form>
-</body>
+      
+      <div class="weather-container" id="weather-container">
+        <div class="weather" id="weather">
+          <h2 id="city-name"></h2>
+          <p>Temperature: <span id="temp">°C</span></p>
+          <p>Humidity: <span id="humidity">%</span></p>
+          <p>Clouds: <span id="clouds"></span>%</p>
+          <p>Wind Speed: <span id="wind-speed"></span> m/s</p>
+        </div>
+      </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("form").submit(function(e) {
+                e.preventDefault();
+                var city = $("#city-input").val();
+                $.get("/weather?city=" + city, function(data) {
+                    $("#city-name").text(city);
+                    $("#temp").text(data.temp + "°C");
+                    $("#humidity").text(data.humidity + "%");
+                    $("#clouds").text(data.clouds);
+                    $("#wind-speed").text(data.wind_speed);
+                }, "json");
+            });
+        });
+    </script>
+  </body>
 </html>

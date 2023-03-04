@@ -1,3 +1,3 @@
-module github.com/sachinparihar/Go-Weather-App
+module main
 
 go 1.20
