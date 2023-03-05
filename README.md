@@ -1,12 +1,14 @@
 # Go-Weather-App
 ## How to run
-First, Clone this repo 
+First, Clone this repo ``` git clone git@github.com:sachinparihar/Go-Weather-App.git ```
+
 then
-pull docker image
+
+pull docker image:
 ```
 docker pull sachinparihar/weather-app:latest
 ```
-run the docker image
+run the docker image:
 ```
 docker run -p 8080:8080 sachinparihar/weather-app:latest
 ```
