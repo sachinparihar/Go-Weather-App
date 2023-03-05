@@ -4,64 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"strings"
 )
 
-type apiConfigData struct {
-	OpenWeatherMapApiKey string `json:"OpenWeatherMapApiKey`
-}
-
-type weatherData struct {
-	Name string `json:"name`
+type WeatherData struct {
 	Main struct {
-		Kelvin float64 `json:"temp"`
+		Temp     float32 `json:"temp"`
+		Humidity int     `json:"humidity"`
 	} `json:"main"`
-	Celsius float64 `json:"celsius"`
-}
-
-func loadApiConfig(filename string) (apiConfigData, error) {
-	bytes, err := ioutil.ReadFile(filename)
-
-	if err != nil {
-		return apiConfigData{}, err
-	}
-
-	var c apiConfigData
-
-	err = json.Unmarshal(bytes, &c)
-	if err != nil {
-		return apiConfigData{}, err
-	}
-	return c, nil
-}
-
-func hello(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello from go!\n"))
-}
-
-func query(city string) (weatherData, error) {
-	apiConfig, err := loadApiConfig(".apiConfig")
-	if err != nil {
-		return weatherData{}, err
-	}
-
-	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + apiConfig.OpenWeatherMapApiKey + "&q=" + city)
-	if err != nil {
-		return weatherData{}, err
-	}
-
-	defer resp.Body.Close()
-
-	var d weatherData
-	if err := json.NewDecoder(resp.Body).Decode(&d); err != nil {
-		return weatherData{}, err
-	}
-
-	// Convert Kelvin to Celsius
-	d.Celsius = d.Main.Kelvin - 273.15
-
-	return d, nil
+	Wind struct {
+		Speed float32 `json:"speed"`
+	} `json:"wind"`
+	Clouds struct {
+		All int `json:"all"`
+	} `json:"clouds"`
 }
 
 func main() {
@@ -69,18 +26,54 @@ func main() {
 		http.ServeFile(w, r, "index.html")
 	})
 
-	http.HandleFunc("/weather/",
-		func(w http.ResponseWriter, r *http.Request) {
-			city := strings.SplitN(r.URL.Path, "/", 3)[2]
-			data, err := query(city)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			json.NewEncoder(w).Encode(data)
-		})
+	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+		apiKey := "db9058e7659fb6c7faf51f7523524e45"
+		city := r.URL.Query().Get("city")
 
-	fmt.Println("Starting server on port 8080")
+		if city == "" {
+			fmt.Fprint(w, "Please provide a city name")
+			return
+		}
+
+		url := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?q=%s&units=metric&appid=%s", city, apiKey)
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			fmt.Fprintf(w, "Weather data not found for city: %s", city)
+			return
+		}
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var weatherData WeatherData
+		err = json.Unmarshal(body, &weatherData)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		data := map[string]interface{}{
+			"temp":       weatherData.Main.Temp,
+			"humidity":   weatherData.Main.Humidity,
+			"clouds":     weatherData.Clouds.All,
+			"wind_speed": weatherData.Wind.Speed,
+		}
+
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(jsonData)
+	})
+
+	log.Println("Server running on port 8080")
 	http.ListenAndServe(":8080", nil)
 }
