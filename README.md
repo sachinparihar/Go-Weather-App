@@ -10,9 +10,9 @@ docker pull sachinparihar/go-weather-app:latest
 ```
 run the docker image:
 ```
-docker run -p 8080:8080 sachinparihar/go-weather-app:latest
+docker run -p 8000:8000 sachinparihar/go-weather-app:latest
 ```
-browser the url ```localhost:8080/ ```
+browser the url ```localhost:8000/ ```
 
 Congrats!🎉 weather-app is running.
 
