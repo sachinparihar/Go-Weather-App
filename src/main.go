@@ -74,6 +74,6 @@ func main() {
 		w.Write(jsonData)
 	})
 
-	log.Println("Server running on port 8080")
+	log.Println("Server running on port 8000")
 	http.ListenAndServe(":8000", nil)
 }
