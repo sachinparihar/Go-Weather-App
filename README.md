@@ -16,4 +16,9 @@ browser the url ```localhost:8000/ ```
 
 Congrats!🎉 weather-app is running.
 
-![Screenshot from 2023-03-05 21-49-57](https://user-images.githubusercontent.com/94243074/222972642-259773db-f9af-46ad-b998-edd522084459.png)
+![Screenshot from 2023-03-15 22-33-05](https://user-images.githubusercontent.com/94243074/225385758-b8ab612d-8078-45e2-b5fd-d0c0a0ee2fbc.png)
+
+### Alter:
+http://4.236.157.153:8000/
+
+replace 4.236.157.153 with your public ip-address.
