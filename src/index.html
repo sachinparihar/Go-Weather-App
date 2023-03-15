@@ -89,7 +89,7 @@
           <p>Temperature: <span id="temp">°C</span></p>
           <p>Humidity: <span id="humidity">%</span></p>
           <p>Clouds: <span id="clouds"></span>%</p>
-          <p>Wind Speed: <span id="wind-speed"></span></p>
+          <p>Wind Speed: <span id="wind-speed">m/s</span></p>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@
       $("#temp").text(data.temp + "°C");
       $("#humidity").text(data.humidity + "%");
       $("#clouds").text(data.clouds);
-      $("#wind-speed").text(data.wind_speed + "m/s"); // added unit
+      $("#wind-speed").text(data.wind_speed + ""); // added unit
     }, "json");
   });
 });
