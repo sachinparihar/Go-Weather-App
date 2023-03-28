@@ -52,4 +52,4 @@ jobs:
           docker stop my-site || true
           docker rm my-site || true
           docker pull sachinparihar/go-weather-app:latest
-          docker run -d -p 8082:8000 --name my-site sachinparihar/go-weather-app:latest
+          docker run -d -p 8080:8000 --name my-site sachinparihar/go-weather-app:latest
