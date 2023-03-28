@@ -1,8 +1,10 @@
 FROM golang:1.20-alpine
 
-WORKDIR /app
+WORKDIR /src
 
 COPY . .
+
+COPY main /app
 
 RUN go mod init main
 
