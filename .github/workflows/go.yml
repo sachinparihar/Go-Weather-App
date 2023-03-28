@@ -37,5 +37,6 @@ jobs:
         image: sachinparihar/go-weather-app
         tags: v1, latest
         registry: docker.io
+        dockerfile: ./src/Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
