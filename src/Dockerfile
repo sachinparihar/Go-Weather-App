@@ -4,8 +4,6 @@ WORKDIR /src
 
 COPY ./src/ .
 
-RUN go mod init github.com/sachinparihar/Go-Weather-App
-
 RUN go mod download
 
 RUN go build -o weather-app .
