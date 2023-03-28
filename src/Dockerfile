@@ -4,8 +4,6 @@ WORKDIR /src
 
 COPY . .
 
-RUN go mod download
-
 RUN go build -o weather-app .
 
 EXPOSE 8000
