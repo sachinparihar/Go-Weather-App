@@ -41,15 +41,3 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Deploy to Virtual Machine
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.VM_HOST }}
-        username: ${{ secrets.VM_USERNAME }}
-        password: ${{ secrets.VM_PASSWORD }}
-        port: ${{ secrets.VM_PORT }}
-        script: |
-          docker stop my-site || true
-          docker rm my-site || true
-          docker pull sachinparihar/go-weather-app:latest
-          docker run -d -p 8000:8000 --name my-site sachinparihar/go-weather-app:latest
