@@ -86,7 +86,7 @@
       <div class="weather-container" id="weather-container">
         <div class="weather" id="weather">
           <h2 id="city-name"></h2>
-          <p>Temperature: <span id="temp">°C</span></p>
+          <p>Temperature: <span id="temp">°F</span></p>
           <p>Humidity: <span id="humidity">%</span></p>
           <p>Clouds: <span id="clouds"></span>%</p>
           <p>Wind Speed: <span id="wind-speed">m/s</span></p>
@@ -103,7 +103,7 @@
     $.get("/weather?city=" + city, function(data) {
       console.log(data); // added line to print response
       $("#city-name").text(data.city);
-      $("#temp").text(data.temp + "°C");
+      $("#temp").text(data.temp + "°F");
       $("#humidity").text(data.humidity + "%");
       $("#clouds").text(data.clouds);
       $("#wind-speed").text(data.wind_speed + ""); // added unit
