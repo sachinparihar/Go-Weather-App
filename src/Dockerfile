@@ -2,7 +2,7 @@ FROM golang:1.20-alpine
 
 WORKDIR /src
 
-COPY ./src/ .
+COPY ../src/ .
 
 RUN go build -o weather-app .
 
