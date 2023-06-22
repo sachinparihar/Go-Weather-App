@@ -23,7 +23,7 @@ type WeatherData struct {
 }
 
 func main() {
-	listenAddr := ":8080"
+	listenAddr := ":8000"
 	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
 		listenAddr = ":" + val
 	}
