@@ -29,6 +29,7 @@ jobs:
       
       - name: Build and push Docker image
         run: |
+          cd go-weather-app/src
           docker build -t weatherapps.azurecr.io/go-weather-app:${{ github.sha }} 
           docker push weatherapps.azurecr.io/go-weather-app:${{ github.sha }}
           docker tag weatherapps.azurecr.io/go-weather-app:${{ github.sha }} weatherapps.azurecr.io/go-weather-app:latest
