@@ -42,6 +42,7 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: 'sachinparihar'
+          publish-profile: ${{ secrets.APP_SERVICE_PUBLISH_PROFILE }}
           images: 'weatherapps.azurecr.io/go-weather-app:${{ github.sha }}'
     
       - name: Azure logout
