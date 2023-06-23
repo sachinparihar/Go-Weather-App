@@ -16,7 +16,8 @@ jobs:
           go-version: 1.19
           
       - name: Install Azure CLI
-        uses: azure/setup-azcli@v1    
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash    
       
       - name: Build
         run: |
