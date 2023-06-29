@@ -1,4 +1,4 @@
-name: Build Linux Container Image and Push to ACR
+name: CI-CD
 
 on:
   push:
