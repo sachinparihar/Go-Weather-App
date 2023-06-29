@@ -1,0 +1,127 @@
+Cname: Build Linux Container Image and Push to ACR
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  DOCKER_REGISTRY_URL: weatherapps.azurecr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+
+      - name: Build
+        run: |
+          cd src
+          go build -o weather-app ./Backend/
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.DOCKER_REGISTRY_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and Push the Docker image
+        run: |
+          docker build ./ -t ${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}
+          docker push ${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}
+
+  dev:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: development
+    env:
+      ENVIRONMENT_PREFIX: dev
+      SERVER_FARM_RESOURCE_GROUP_NAME: openfunction
+      WEBAPP_LOCATION: eastus
+      WEBAPP_SKU: Basic
+      WEBAPP_SKU_CODE: B1
+      TAG_ENVIRONMENT: DEVELOPMENT
+    steps:
+      - name: Download ARM Templates
+        uses: actions/download-artifact@v3
+        with:
+          name: arm-templates
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ARM Template
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.SERVER_FARM_RESOURCE_GROUP_NAME }}
+          deploymentMode: Incremental
+          template: azuredeploy.json
+          parameters: |
+            subscriptionId="${{ secrets.SUBSCRIPTION_ID }}"
+            name="${{ env.ENVIRONMENT_PREFIX }}-sachinparihar"
+            location="${{ env.WEBAPP_LOCATION }}"
+            hostingPlanName="${{ env.ENVIRONMENT_PREFIX }}-asp"
+            serverFarmResourceGroup="${{ env.SERVER_FARM_RESOURCE_GROUP_NAME }}"
+            sku="${{ env.WEBAPP_SKU }}"
+            skuCode="${{ env.WEBAPP_SKU_CODE }}"
+            linuxFxVersion="DOCKER|${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}"
+            dockerRegistryUrl="${{ env.DOCKER_REGISTRY_URL }}"
+            dockerRegistryUsername="${{ secrets.ACR_USERNAME }}"
+            dockerRegistryPassword="${{ secrets.ACR_PASSWORD }}"
+            tag_environment="${{ env.TAG_ENVIRONMENT }}"
+
+  prd:
+    runs-on: ubuntu-latest
+    needs: dev
+    environment: production
+    env:
+      ENVIRONMENT_PREFIX: prd
+      SERVER_FARM_RESOURCE_GROUP_NAME: openfunction
+      WEBAPP_LOCATION: eastus
+      WEBAPP_SKU: Basic
+      WEBAPP_SKU_CODE: B1
+      TAG_ENVIRONMENT: PRODUCTION
+    steps:
+      - name: Download ARM Templates
+        uses: actions/download-artifact@v3
+        with:
+          name: arm-templates
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ARM Template
+        uses: azure/arm-deploy@v1
+        with:
+           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+           resourceGroupName: ${{ env.SERVER_FARM_RESOURCE_GROUP_NAME }}
+           deploymentMode: Incremental
+           template: azuredeploy.json
+           parameters: |
+             subscriptionId="${{ secrets.SUBSCRIPTION_ID }}"
+             name="${{ env.ENVIRONMENT_PREFIX }}-sachinparihar"
+             location="${{ env.WEBAPP_LOCATION }}"
+             hostingPlanName="${{ env.ENVIRONMENT_PREFIX }}-asp"
+             serverFarmResourceGroup="${{ env.SERVER_FARM_RESOURCE_GROUP_NAME }}"
+             sku="${{ env.WEBAPP_SKU }}"
+             skuCode="${{ env.WEBAPP_SKU_CODE }}"
+             linuxFxVersion="DOCKER|${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}"
+             dockerRegistryUrl="${{ env.DOCKER_REGISTRY_URL }}"
+             dockerRegistryUsername="${{ secrets.ACR_USERNAME }}"
+             dockerRegistryPassword="${{ secrets.ACR_PASSWORD }}"
+             tag_environment="${{ env.TAG_ENVIRONMENT }}"
+
+
