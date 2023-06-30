@@ -54,6 +54,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: arm-templates
+          path: Go-Weather-App/src/deploy
 
       - name: "Login via Azure CLI"
         uses: azure/login@v1
@@ -97,6 +98,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: arm-templates
+          path: Go-Weather-App/src/deploy
 
       - name: "Login via Azure CLI"
         uses: azure/login@v1
