@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and Push the Docker image
         run: |
-          docker build ./ -t ${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}
+          docker build ./src/Backend -t ${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}
           docker push ${{ env.DOCKER_REGISTRY_URL }}/go-weather-app:${{ github.run_id }}
 
   dev:
