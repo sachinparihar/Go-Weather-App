@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: arm-templates
-          path: src/deploy
+          path: ${{ github.workspace }}/src/deploy/azuredeploy.json
 
       - name: "Login via Azure CLI"
         uses: azure/login@v1
