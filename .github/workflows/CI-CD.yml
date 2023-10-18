@@ -1,38 +1,37 @@
-name: CI-CD
+name: Go
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
-
-env:
-  DOCKER_REGISTRY_URL: docker.io/sachinparihar
-  IMAGE_NAME: go-weather-app
+    branches: [ "main" ]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.19
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
 
-      - name: Build
-        run: |
-          cd src/Backend
-          go build -o weather-app ./main.go
-
-      - name: Docker Login
-        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t ${{ env.DOCKER_REGISTRY_URL }}//go-weather-app:${{ github.run_id }} ./src/Backend
-          docker push ${{ env.DOCKER_REGISTRY_URL }}//go-weather-app:${{ github.run_id }}
+    - name: Build
+      run: |
+        cd src
+        go build -v ./...
+    - name: Test
+      run: |
+        cd src
+        go test -v ./...
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Build & push Docker image
+      with:
+        image: sachinparihar/go-weather-app
+        tags: v1, latest
+        registry: docker.io
+        dockerfile: ./src/Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
