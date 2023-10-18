@@ -20,12 +20,12 @@ jobs:
 
     - name: Build
       run: |
-        cd src
-        go build -v ./...
+        cd src/Backend
+        go build -o weather-app ./main.go
     - name: Test
       run: |
-        cd src
-        go test -v ./...
+        cd src/Backend
+        go test -o weather-app ./main.go
     - uses: mr-smithers-excellent/docker-build-push@v6
       name: Build & push Docker image
       with:
