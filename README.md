@@ -1,8 +1,9 @@
 # Go-Weather-App
 ## How to run
-First, Clone this repo ``` git clone git@github.com:sachinparihar/Go-Weather-App.git ```
-
-then
+First, Clone this repo:
+```
+git clone git@github.com:sachinparihar/Go-Weather-App.git
+```
 
 pull docker image:
 ```
