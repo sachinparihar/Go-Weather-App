@@ -4,16 +4,19 @@ First, Clone this repo:
 ```
 git clone git@github.com:sachinparihar/Go-Weather-App.git
 ```
+```
+cd Go-Weather-App
+```
 
-pull docker image:
+Pull docker image:
 ```
 docker pull sachinparihar/go-weather-app:latest
 ```
-run the docker image:
+Run the docker image:
 ```
 docker run -p 8000:8000 sachinparihar/go-weather-app:latest
 ```
-browser the url ```localhost:8000/ ```
+Browser the url ```localhost:8000/ ```
 
 Congrats!🎉 weather-app is running.
 
