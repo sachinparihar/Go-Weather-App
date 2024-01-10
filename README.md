@@ -7,6 +7,12 @@ git clone git@github.com:sachinparihar/Go-Weather-App.git
 ```
 cd Go-Weather-App
 ```
+```
+cd src/Backend
+```
+```
+go run main.go
+```
 
 Pull docker image:
 ```
