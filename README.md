@@ -5,10 +5,7 @@ First, Clone this repo:
 git clone git@github.com:sachinparihar/Go-Weather-App.git
 ```
 ```
-cd Go-Weather-App
-```
-```
-cd src/Backend
+cd Go-Weather-App/src/Backend
 ```
 ```
 go run main.go
