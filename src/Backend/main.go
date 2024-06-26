@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 type WeatherData struct {
@@ -22,13 +23,18 @@ type WeatherData struct {
 }
 
 func main() {
+	// Get the Frontend directory path from the environment variable or default to "../Frontend/"
+	frontendDir := os.Getenv("FRONTEND_DIR")
+	if frontendDir == "" {
+		frontendDir = "../Frontend/"
+	}
 
-	fileServer := http.FileServer(http.Dir("../Frontend/"))
+	fileServer := http.FileServer(http.Dir(frontendDir))
 	http.Handle("/", fileServer)
 	http.HandleFunc("/weather", HandleWeather)
 	listenAddr := ":8000"
 	log.Printf("Starting server on %s", listenAddr)
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	if err := http.ListenAndServe(listenAddr, nil); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -54,7 +60,7 @@ func HandleWeather(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
