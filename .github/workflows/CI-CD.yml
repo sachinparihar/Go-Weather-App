@@ -12,25 +12,28 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Go
+    - name: Set up Go 1.20
       uses: actions/setup-go@v3
       with:
         go-version: 1.20
 
-    - name: Check Go version
-      run: go version
+    - name: Print Go version and GOROOT
+      run: |
+        go version
+        echo "GOROOT=$GOROOT"
 
     - name: Build
       run: |
         cd src/Backend
-        go build -buildmode=exe -o weather-app ./main.go
+        go build -o weather-app ./main.go  # Temporarily removed -buildmode=exe for debugging
 
     - name: Test
       run: |
         cd src/Backend
         go test ./...
 
-    - uses: mr-smithers-excellent/docker-build-push@v6
+    # Check for the latest version of the Docker build and push action
+    - uses: mr-smithers-excellent/docker-build-push@v6  # Check if a newer version is available
       name: Build & push Docker image
       with:
         image: sachinparihar/go-weather-apps
