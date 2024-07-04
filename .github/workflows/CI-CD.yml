@@ -1,43 +1,35 @@
-name: Go
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
 
-    - name: Set up Go 1.20
-      uses: actions/setup-go@v3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
       with:
         go-version: 1.20
 
-    - name: Print Go version and GOROOT
-      run: |
-        go version
-        echo "GOROOT=$GOROOT"
-
-    - name: Build
+    - name: Build Backend
       run: |
         cd src/Backend
-        go build -o weather-app ./main.go  # Ensure the path is correct
+        go build -o ../../weather-app
 
-    - name: Test
-      run: |
-        cd src/Backend
-        go test ./...
-
-    - name: Build & push Docker image
-      uses: mr-smithers-excellent/docker-build-push@v6
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v2
       with:
-        image: sachinparihar/go-weather-apps
-        tags: v1, latest
-        registry: docker.io
-        dockerfile: src/Backend/Dockerfile  # Ensure this path is correct relative to the root of your repository
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/go-weather-apps:latest
