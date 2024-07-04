@@ -13,11 +13,11 @@ go run main.go
 
 Pull docker image:
 ```
-docker pull sachinparihar/go-weather-app:latest
+docker pull sachinparihar/go-weather-apps:latest
 ```
 Run the docker image:
 ```
-docker run -p 8000:8000 sachinparihar/go-weather-app:latest
+docker run -p 8000:8000 sachinparihar/go-weather-apps:latest
 ```
 Browser the url ```localhost:8000/ ```
 
