@@ -64,6 +64,15 @@ button[type="submit"]:hover {
   margin-bottom: 10px;
 }
 
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #008CBA;
+  color: white;
+  font-size: 16px;
+}
+
 @media (max-width: 480px) {
   body {
     font-family: Arial, sans-serif;
@@ -113,5 +122,8 @@ button[type="submit"]:hover {
     font-size: 20px; /* Larger font size for better readability */
     margin-bottom: 5px; /* Reduced bottom margin */
   }
-}
 
+  footer {
+    font-size: 14px; /* Slightly smaller font size for mobile */
+  }
+}
