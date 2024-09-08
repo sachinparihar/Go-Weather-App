@@ -65,12 +65,17 @@ button[type="submit"]:hover {
 }
 
 footer {
+  font-size: 14px; /* Slightly smaller font size for mobile */
+  margin-top: auto; /* Pushes the footer to the bottom */
+  width: 99%; /* Ensures the footer spans the full width */
+  position: fixed; /* Fixes the footer at the bottom */
+  bottom: 0; /* Aligns the footer to the bottom of the viewport */
+  background-color: #008CBA; /* Optional: background color for the footer */
+  padding: 10px 0; /* Optional: padding for the footer */
+}
+footer p{
   text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #008CBA;
-  color: white;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 @media (max-width: 480px) {
@@ -124,6 +129,11 @@ footer {
   }
 
   footer {
-    font-size: 14px; /* Slightly smaller font size for mobile */
+    font-size: 12px; /* Smaller font size for mobile */
+    padding: 8px 0; /* Reduced padding for mobile */
+  }
+
+  footer p {
+    font-size: 16px; /* Smaller font size for mobile */
   }
 }
